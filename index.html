@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador ONDAS (1925-1935) - Números Completos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            height: fit-content;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            position: sticky;
+            top: 20px;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            min-height: calc(100vh - 40px);
+        }
+
+        h1 {
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-info {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .project-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .project-logo span {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-section {
+            margin-bottom: 30px;
+        }
+
+        .search-section h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-section {
+            margin-bottom: 25px;
+        }
+
+        .filter-section h3 {
+            color: #4a5568;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .year-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .year-button {
+            padding: 8px 16px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .year-button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .year-button:hover {
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .stats {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stats h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .corpus-stats {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+        }
+
+        .corpus-info {
+            text-align: center;
+        }
+
+        .corpus-number {
+            display: block;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+
+        .corpus-label {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .results-count {
+            font-size: 1.2em;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .article-item {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .article-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .article-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .article-date {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .article-content {
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #4a5568;
+            max-height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .article-content.expanded {
+            max-height: none;
+        }
+
+        .expand-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .expand-button:hover {
+            background: #5568d3;
+        }
+
+        .highlight {
+            background: #fef5e7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 10px 16px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination button:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            color: #718096;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="project-info">
+                <div class="project-logo">
+                    Proyecto <span>LexiMus</span>
+                </div>
+                <div style="font-size: 0.9rem; color: #718096;">
+                    Universidad de Salamanca
+                </div>
+            </div>
+
+            <div class="search-section">
+                <h2>🔍 Búsqueda</h2>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar en ONDAS...">
+            </div>
+
+            <div class="filter-section">
+                <h3>📅 Filtrar por año</h3>
+                <div class="year-filters" id="yearFilters">
+                    <button class="year-button active" data-year="all">Todos</button>
+                </div>
+            </div>
+
+            <div class="stats">
+                <h3>📊 Estadísticas</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalArticles">-</div>
+                        <div class="stat-label">Números</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="filteredArticles">-</div>
+                        <div class="stat-label">Filtrados</div>
+                    </div>
+                </div>
+                <div class="corpus-stats">
+                    <div class="corpus-info">
+                        <span class="corpus-number">1,742,470</span>
+                        <span class="corpus-label">palabras totales</span>
+                    </div>
+                    <div class="corpus-info" style="margin-top: 10px;">
+                        <span class="corpus-number">472</span>
+                        <span class="corpus-label">números (1925-1935)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h1>Revista ONDAS<br><span style="font-size: 0.6em; font-weight: normal;">Números Completos 1925-1935</span></h1>
+
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">Cargando...</div>
+            </div>
+
+            <div id="resultsContainer">
+                <div class="loading">
+                    Cargando números de ONDAS...
+                </div>
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+
+    <script>
+        let ARTICLES_DATA = [];
+
+        fetch('ondas_data.json')
+            .then(response => response.json())
+            .then(data => {
+                ARTICLES_DATA = data.articles;
+                window.searcher = new ONDASSearcher();
+            })
+            .catch(error => {
+                console.error('Error cargando datos:', error);
+                document.getElementById('resultsContainer').innerHTML =
+                    '<div class="no-results">Error al cargar los datos. Asegúrate de que ondas_data.json esté en el mismo directorio.</div>';
+            });
+
+        class ONDASSearcher {
+            constructor() {
+                this.articles = ARTICLES_DATA;
+                this.filteredArticles = [];
+                this.currentPage = 1;
+                this.articlesPerPage = 10;
+                this.currentFilters = {
+                    search: '',
+                    year: 'all'
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.setupFilters();
+                this.setupEventListeners();
+                this.filterAndDisplay();
+            }
+
+            setupFilters() {
+                const years = [...new Set(this.articles.map(a => a.year))].sort();
+                const yearContainer = document.getElementById('yearFilters');
+                years.forEach(year => {
+                    const button = document.createElement('button');
+                    button.className = 'year-button';
+                    button.dataset.year = year;
+                    button.textContent = year;
+                    yearContainer.appendChild(button);
+                });
+            }
+
+            setupEventListeners() {
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    this.currentFilters.search = e.target.value;
+                    this.currentPage = 1;
+                    this.filterAndDisplay();
+                });
+
+                document.querySelectorAll('.year-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        document.querySelectorAll('.year-button').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.currentFilters.year = e.target.dataset.year;
+                        this.currentPage = 1;
+                        this.filterAndDisplay();
+                    });
+                });
+            }
+
+            filterAndDisplay() {
+                this.filteredArticles = this.articles.filter(article => {
+                    if (this.currentFilters.search) {
+                        const searchLower = this.currentFilters.search.toLowerCase();
+                        const inContent = article.content.toLowerCase().includes(searchLower);
+                        const inTitle = article.title.toLowerCase().includes(searchLower);
+                        if (!inContent && !inTitle) return false;
+                    }
+
+                    if (this.currentFilters.year !== 'all' &&
+                        article.year !== this.currentFilters.year) {
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                // Ordenar por fecha (más reciente primero)
+                this.filteredArticles.sort((a, b) => {
+                    const dateA = this.parseDate(a.date);
+                    const dateB = this.parseDate(b.date);
+                    return dateB - dateA;
+                });
+
+                this.displayResults();
+                this.updatePagination();
+                this.updateStats();
+            }
+
+            parseDate(dateStr) {
+                if (!dateStr) return new Date(0);
+                const parts = dateStr.split('/');
+                if (parts.length === 3) {
+                    return new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+                return new Date(0);
+            }
+
+            displayResults() {
+                const container = document.getElementById('resultsContainer');
+                const startIndex = (this.currentPage - 1) * this.articlesPerPage;
+                const endIndex = startIndex + this.articlesPerPage;
+                const pageArticles = this.filteredArticles.slice(startIndex, endIndex);
+
+                if (pageArticles.length === 0) {
+                    container.innerHTML = '<div class="no-results">No se encontraron números que coincidan con los criterios de búsqueda</div>';
+                    return;
+                }
+
+                container.innerHTML = pageArticles.map((article, index) => {
+                    const highlightedContent = this.highlightSearchTerms(article.content);
+                    const articleId = `article-${startIndex + index}`;
+                    return `
+                        <div class="article-item">
+                            <div class="article-title">${article.title}</div>
+                            <div class="article-meta">
+                                <span class="article-date">${article.date}</span>
+                            </div>
+                            <div class="article-content" id="${articleId}">
+                                ${this.truncateContent(highlightedContent, 1000)}
+                            </div>
+                            ${article.content.length > 1000 ? `
+                                <button class="expand-button" onclick="searcher.toggleExpand('${articleId}', this)">
+                                    Ver número completo
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            toggleExpand(articleId, button) {
+                const contentDiv = document.getElementById(articleId);
+                const article = this.filteredArticles.find(a => contentDiv.parentElement.querySelector('.article-title').textContent === a.title);
+
+                if (contentDiv.classList.contains('expanded')) {
+                    contentDiv.innerHTML = this.truncateContent(this.highlightSearchTerms(article.content), 1000);
+                    contentDiv.classList.remove('expanded');
+                    button.textContent = 'Ver número completo';
+                } else {
+                    contentDiv.innerHTML = this.highlightSearchTerms(article.content);
+                    contentDiv.classList.add('expanded');
+                    button.textContent = 'Ver menos';
+                }
+            }
+
+            truncateContent(content, maxLength) {
+                if (content.length <= maxLength) return content;
+                return content.substring(0, maxLength) + '...';
+            }
+
+            highlightSearchTerms(content) {
+                if (!this.currentFilters.search || !content) return content;
+
+                const searchTerm = this.currentFilters.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                return content.replace(regex, '<span class="highlight">$1</span>');
+            }
+
+            updatePagination() {
+                const totalPages = Math.ceil(this.filteredArticles.length / this.articlesPerPage);
+                const pagination = document.getElementById('pagination');
+
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+
+                let paginationHTML = '';
+
+                paginationHTML += `
+                    <button onclick="searcher.goToPage(${this.currentPage - 1})"
+                            ${this.currentPage === 1 ? 'disabled' : ''}>
+                        ← Anterior
+                    </button>
+                `;
+
+                const maxVisiblePages = 5;
+                let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+                if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                }
+
+                if (startPage > 1) {
+                    paginationHTML += `<button onclick="searcher.goToPage(1)">1</button>`;
+                    if (startPage > 2) paginationHTML += `<button disabled>...</button>`;
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    paginationHTML += `
+                        <button onclick="searcher.goToPage(${i})"
+                                ${i === this.currentPage ? 'class="active"' : ''}>
+                            ${i}
+                        </button>
+                    `;
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) paginationHTML += `<button disabled>...</button>`;
+                    paginationHTML += `<button onclick="searcher.goToPage(${totalPages})">${totalPages}</button>`;
+                }
+
+                paginationHTML += `
+                    <button onclick="searcher.goToPage(${this.currentPage + 1})"
+                            ${this.currentPage === totalPages ? 'disabled' : ''}>
+                        Siguiente →
+                    </button>
+                `;
+
+                pagination.innerHTML = paginationHTML;
+            }
+
+            goToPage(page) {
+                const totalPages = Math.ceil(this.filteredArticles.length / this.articlesPerPage);
+                if (page < 1 || page > totalPages) return;
+
+                this.currentPage = page;
+                this.displayResults();
+                this.updatePagination();
+
+                document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            updateStats() {
+                document.getElementById('totalArticles').textContent = this.articles.length;
+                document.getElementById('filteredArticles').textContent = this.filteredArticles.length;
+                document.getElementById('resultsCount').textContent =
+                    `${this.filteredArticles.length} números encontrados`;
+            }
+        }
+    </script>
+</body>
+</html>
