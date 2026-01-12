@@ -12,52 +12,9 @@ Buscador interactivo de noticias musicales de la revista **ONDAS** (1925-1935), 
 
 ## 🎯 Características
 
-- **23,689 artículos** procesados de 472 números de ONDAS
-- **Búsqueda de texto completo** con resaltado de términos
-- **Filtros por año** (1925-1935)
-- **Filtros por tipo de contenido**:
-  - Programación radiofónica
-  - Crítica musical
-  - Ópera
-  - Zarzuela
-  - Conciertos
-  - Música clásica
-  - Intérpretes
-  - Radio
-  - General
-- **Ordenamiento** por fecha, tipo o relevancia
-- **Paginación** optimizada para corpus grandes
-- **710,670 palabras** aproximadas en el corpus
-
-## 📊 Estadísticas del Corpus
-
-| Año | Artículos |
-|-----|-----------|
-| 1925 | 996 |
-| 1926 | 1,912 |
-| 1927 | 3,076 |
-| 1929 | 2,528 |
-| 1930 | 2,923 |
-| 1931 | 1,527 |
-| 1932 | 1,772 |
-| 1933 | 2,075 |
-| 1934 | 3,893 |
-| 1935 | 2,987 |
-| **Total** | **23,689** |
-
-## 🎭 Distribución por Tipo de Contenido
-
-| Tipo | Artículos | Porcentaje |
-|------|-----------|------------|
-| General | 6,833 | 28.8% |
-| Ópera | 4,080 | 17.2% |
-| Programación | 3,958 | 16.7% |
-| Concierto | 2,826 | 11.9% |
-| Radio | 2,634 | 11.1% |
-| Música clásica | 1,578 | 6.7% |
-| Intérpretes | 972 | 4.1% |
-| Zarzuela | 417 | 1.8% |
-| Crítica | 391 | 1.7% |
+Las trasncripciones se han realizado de forma automática con Claude, con revisión y supervisión humana. En una primera fase se revisaron los primeros números procesados, para asegurar la validación y calibrar el prompt de uso. Posteriormente se fueron revisando de forma aleatoria los números, para asegurar un porcentaje válido de transcripción. Se estima que el error es menor al 5%, pero al tratarse de transcripciones realizadas por IA aconsejamos cotejar las fuentes con las originales conservadas en la BNE.
+La ventaja de nuestro repositorio es que no tiene errores típicos de OCR, propios de la prensa histórica, y por ello la cantidad de datos que podemos recuperar es mayor (aunque haya que ir posteriormente a las Hemerotecas digitales para verificar que todo ha sido bien procesado).
+Estos datos se han usado dentro del proyecto para análisis computacionales (distant reading), pero dada la gran calidad de las transcripciones se ha decidido compartir estos números para poder realizar también una lectura atenta y cercana.
 
 ## 🚀 Uso
 
@@ -98,8 +55,7 @@ Este recurso es parte del proyecto **LexiMus: Léxico y ontología de la música
 ## 📝 Metodología
 
 1. **Digitalización**: Transcripción de 472 números de ONDAS (1925-1935)
-2. **Procesamiento**: Análisis con Python y NLP
-3. **Clasificación**: Categorización automática por tipo de contenido
+2. **Procesamiento**: Análisis con Python y NLP, Claude
 4. **Extracción**: Identificación de secciones y artículos
 5. **Visualización**: Interfaz web interactiva
 
@@ -113,11 +69,11 @@ Este recurso es parte del proyecto **LexiMus: Léxico y ontología de la música
 ## 📧 Contacto
 
 Proyecto **LexiMus** - Universidad de Salamanca
-[https://leximususal.github.io/](https://leximususal.github.io/)
+[https://leximus.usal.es/](https://leximus.usal.es/)
 
 ## 📜 Licencia
 
-Este proyecto se distribuye bajo licencia académica con fines de investigación.
+Este proyecto se distribuye bajo licencia académica con fines de investigación. Pero no olvides citar esta página correctamente.
 
 ## 🙏 Reconocimientos
 
@@ -128,4 +84,4 @@ Este proyecto se distribuye bajo licencia académica con fines de investigación
 ---
 
 **Generado el**: Enero 2026
-**Corpus**: 710,670 palabras aprox. | 472 números procesados | 23,689 artículos
+**Corpus**: 1.742.470 palabras. | 472 números procesados |
